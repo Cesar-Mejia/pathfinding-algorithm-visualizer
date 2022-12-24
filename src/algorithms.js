@@ -29,6 +29,19 @@ export function endNode(nodes) {
   }
 }
 
+function resetNodes(prevNodes) {
+  // clearAnimations()
+  let newNodes = { ...prevNodes }
+  for (let node in newNodes) {
+    newNodes[node].adjacentNodes = []
+    newNodes[node].distance = null
+    newNodes[node].previous = null
+    newNodes[node].gScore = Infinity
+    newNodes[node].fScore = Infinity
+  }
+  return newNodes
+}
+
 function calculateAdjacentNodes(node, nodes, totalRows, totalCols) {
   let currentNode = nodes[node]
   let adjacentNodes = []
@@ -52,8 +65,8 @@ function calculateAdjacentNodes(node, nodes, totalRows, totalCols) {
   return adjacentNodes
 }
 
-export function dijkstra(nodes, totalRows, totalCols) {
-  console.log('dijkstras activated')
+export function dijkstra(prevNodes, totalRows, totalCols) {
+  let nodes = resetNodes(prevNodes)
   let start = startNode(nodes)
   let finish = endNode(nodes)
   let visitedNodes = []
@@ -72,7 +85,7 @@ export function dijkstra(nodes, totalRows, totalCols) {
     }
   }
 
-  while (true) {
+  while (queueNodes.values.length) {
     smallest = queueNodes.dequeue().value
     if (nodes[smallest].distance !== Infinity) visitedNodes.push(smallest)
 
@@ -106,7 +119,11 @@ function heuristic(nodes, node1, node2) {
   return rowDifference + colDifference
 }
 
-export function aStar(nodes, start, finish, totalRows, totalCols) {
+export function aStar(prevNodes, totalRows, totalCols) {
+  let nodes = resetNodes(prevNodes)
+  let start = startNode(nodes)
+  let finish = endNode(nodes)
+
   let visitedNodes = []
   let shortestPath = []
   let openSet = new priorityQueue()
@@ -149,11 +166,13 @@ export function aStar(nodes, start, finish, totalRows, totalCols) {
   } else {
     shortestPath = []
   }
-
   return { visitedNodes, shortestPath }
 }
 
-export function DFS_recursive(nodes, start, finish, totalRows, totalCols) {
+export function DFS_recursive(prevNodes, totalRows, totalCols) {
+  let nodes = resetNodes(prevNodes)
+  let start = startNode(nodes)
+  let finish = endNode(nodes)
   let result = []
   let visited = {}
 

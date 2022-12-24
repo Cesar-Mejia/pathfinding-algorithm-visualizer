@@ -21,16 +21,12 @@ function App() {
   // const [endNode, setEndNode] = useState(`r${INITIAL_ROW}c${INITIAL_END_COL}`)
 
   const [nodes, setNodes] = useState(initializeNodes())
-  // const [isAnimating, setIsAnimating] = useState(false)
-  // const [visualizationDone, setVisualizationDone] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [animationDone, setAnimationDone] = useState(false)
 
   // const [recompute, setRecompute] = useState(false)
 
   const nodeRefs = useRef({})
-
-  // useEffect(() => {
-  //   reComputeAlgorithm()
-  // }, [recompute])
 
   function createNode(row, col) {
     return {
@@ -62,81 +58,6 @@ function App() {
     return nodes
   }
 
-  function clearAnimations() {
-    for (let node in nodeRefs.current) {
-      const element = nodeRefs.current[node]
-      element.classList.remove(
-        'node-visited',
-        'node-final-path',
-        'node-visited-recompute',
-        'node-final-path-recompute'
-      )
-    }
-  }
-
-  function resetNodes() {
-    clearAnimations()
-    let newNodes = { ...nodes }
-    for (let node in newNodes) {
-      newNodes[node].adjacentNodes = []
-      newNodes[node].distance = null
-      newNodes[node].previous = null
-      newNodes[node].gScore = Infinity
-      newNodes[node].fScore = Infinity
-    }
-    setNodes(newNodes)
-  }
-
-  // function reComputeAlgorithm() {
-  //   // console.log('startNode-recomp', startNode)
-  //   resetNodes()
-  //   // console.log('recompute activated')
-  //   switch (chosenAlgorithm) {
-  //     case "Dijkstra's":
-  //       const dijkstraResults = dijkstra(nodes, nodes.startNode, nodes.endNode, TOTAL_ROWS, TOTAL_COLS)
-  //       console.log('dijkstraResults', dijkstraResults)
-  //       setVisitedNodes(dijkstraResults.visitedNodes)
-  //       setShortestPath(dijkstraResults.shortestPath)
-  //       break
-  //     case 'A*':
-  //       const aStarResults = aStar(nodes, nodes.startNode, nodes.endNode, TOTAL_ROWS, TOTAL_COLS)
-  //       setVisitedNodes(aStarResults.visitedNodes)
-  //       setShortestPath(aStarResults.shortestPath)
-  //       break
-  //     case 'Depth First':
-  //       const dfsResults = DFS_recursive(nodes, nodes.startNode, nodes.endNode, TOTAL_ROWS, TOTAL_COLS)
-  //       setVisitedNodes(dfsResults.visitedNodes)
-  //       setShortestPath(dfsResults.shortestPath)
-  //       break
-  //     case 'Breadth First':
-  //       const breadthFirstResults = dijkstra(nodes, nodes.startNode, nodes.endNode, TOTAL_ROWS, TOTAL_COLS)
-  //       setVisitedNodes(breadthFirstResults.visitedNodes)
-  //       setShortestPath(breadthFirstResults.shortestPath)
-  //       break
-  //   }
-  //   recomputeColors()
-  // }
-
-  // function recomputeColors() {
-  //   console.log('shortestPath', visitedNodes)
-  //   for (let i = 0; i <= visitedNodes.length; i++) {
-  //     if (i === visitedNodes.length) {
-  //       for (let j = 0; j < shortestPath.length; j++) {
-  //         let node2 = shortestPath[j]
-  //         const node2Element = nodeRefs.current[node2]
-  //         const currentClass2 = node2Element.className
-  //         node2Element.className = currentClass2 + ' node-final-path-recompute'
-  //       }
-  //       break
-  //     }
-  //     let node1 = visitedNodes[i]
-  //     console.log('visitedNodes[i]', visitedNodes[i])
-  //     const node1Element = nodeRefs.current[node1]
-  //     const currentClass1 = node1Element.className
-  //     node1Element.className = currentClass1 + ' node-visited-recompute'
-  //   }
-  // }
-
   return (
     <nodesContext.Provider value={[nodes, setNodes]}>
       <div className="App">
@@ -146,8 +67,10 @@ function App() {
           totalRows={TOTAL_ROWS}
           totalCols={TOTAL_COLS}
           nodeRefs={nodeRefs}
-          // isAnimating={isAnimating}
-          // setIsAnimating={setIsAnimating}
+          isAnimating={isAnimating}
+          setIsAnimating={setIsAnimating}
+          animationDone={animationDone}
+          setAnimationDone={setAnimationDone}
           // initializeNodes={initializeNodes}
           // visualizationDone={visualizationDone}
           // setVisualizationDone={setVisualizationDone}
@@ -157,8 +80,8 @@ function App() {
           // setVisitedNodes={setVisitedNodes}
           // shortestPath={shortestPath}
           // setShortestPath={setShortestPath}
-          clearAnimations={clearAnimations}
-          resetNodes={resetNodes}
+
+          // resetNodes={resetNodes}
         />
         <Grid
           totalRows={TOTAL_ROWS}
@@ -168,8 +91,10 @@ function App() {
           // setStartNode={setStartNode}
           // setEndNode={setEndNode}
           nodeRefs={nodeRefs}
-          // isAnimating={isAnimating}
-          // setIsAnimating={setIsAnimating}
+          isAnimating={isAnimating}
+          setIsAnimating={setIsAnimating}
+          animationDone={animationDone}
+          setAnimationDone={setAnimationDone}
           // reComputeAlgorithm={reComputeAlgorithm}
           // visualizationDone={visualizationDone}
           // setVisualizationDone={setVisualizationDone}

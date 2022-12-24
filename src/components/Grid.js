@@ -12,8 +12,10 @@ function Grid({
   // setStartNode,
   // setEndNode,
   nodeRefs,
-  isAnimating
-  // setIsAnimating,
+  isAnimating,
+  setIsAnimating,
+  animationDone,
+  setAnimationDone
   // visualizationDone,
   // reComputeAlgorithm,
   // setVisualizationDone
@@ -32,9 +34,8 @@ function Grid({
   }
 
   function resetStartNode(newStartNode) {
-    console.log('resetStartNode active')
     let newNodes = { ...nodes }
-    let prevStartNode = startNode(newNodes)
+    let prevStartNode = startNode(nodes)
     // for (let node in newNodes) {
     // if (newNodes[node].isStartNode) {
     newNodes[prevStartNode].isStartNode = false
@@ -46,7 +47,7 @@ function Grid({
 
   function resetEndNode(newEndNode) {
     let newNodes = { ...nodes }
-    let prevEndNode = endNode(newNodes)
+    let prevEndNode = endNode(nodes)
     // for (let node in newNodes) {
     // if (newNodes[node].isStartNode) {
     newNodes[prevEndNode].isEndNode = false
@@ -62,8 +63,9 @@ function Grid({
     // console.log(nodes[pressedNode])
     // if (pressedNode === startNode) setStartNodePressed(true)
     // if (pressedNode === nodes.startNode) setStartNodePressed(true)
-    if (nodes[pressedNode].isStartNode) setStartNodePressed(true)
+
     if (nodes[pressedNode].isEndNode) setEndNodePressed(true)
+    if (nodes[pressedNode].isStartNode) setStartNodePressed(true)
     if (!nodes[pressedNode].isStartNode && !nodes[pressedNode].isEndNode) {
       toggleWallNode(pressedNode)
     }
@@ -134,16 +136,17 @@ function Grid({
   }
 
   function handleAnimationEnd(e) {
-    // if (e.target.id === nodes.endNode) {
-    //   setIsAnimating(false)
-    //   setVisualizationDone(true)
-    // }
+    if (e.target.id !== endNode(nodes)) return
+    setTimeout(() => {
+      setIsAnimating(false)
+    }, 400)
+    setAnimationDone(true)
   }
 
   return (
     <table
       className="grid"
-      onAnimationEnd={e => handleAnimationEnd(e)}
+      onAnimationEnd={isAnimating ? e => handleAnimationEnd(e) : null}
       style={isAnimating ? { pointerEvents: 'none' } : {}}
     >
       {<tbody>{buildGrid()}</tbody>}
