@@ -1,0 +1,46 @@
+.info {
+  /* background-color: lightblue; */
+  height: 90px;
+  padding-top: 20px;
+}
+
+.info-start-node {
+  content:url("../img/start-node.svg");
+}
+
+.info-end-node {
+  content:url("../img/end-node.svg");
+}
+
+
+.info-wall-node {
+  content:url("../img/wall-node.png");
+}
+
+.info-visited-node {
+  content:url("../img/visited-node.png");
+}
+
+.info-shortest-path-node {
+  content:url("../img/shortest-path-node.png");
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.info-current-algorithm {
+  margin-top: 12px;
+  margin-bottom: 6px;
+  /* font-weight: bold; */
+}
+/* .info-unvisited-node {
+  border-width: 4px;
+  border-color: black;
+} */
+
+.caption {
+  color: black;
+}

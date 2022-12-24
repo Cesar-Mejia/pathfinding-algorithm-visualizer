@@ -2,6 +2,7 @@ import './App.css'
 import { useState, createContext, useRef, useEffect } from 'react'
 import Header from './components/Header'
 import Grid from './components/Grid'
+import Information from './components/Information'
 // import { dijkstra, aStar, DFS_recursive } from './algorithms'
 
 export const nodesContext = createContext()
@@ -23,6 +24,7 @@ function App() {
   const [nodes, setNodes] = useState(initializeNodes())
   const [isAnimating, setIsAnimating] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
+  const [chosenAlgorithm, setChosenAlgorithm] = useState("Dijkstra's")
 
   // const [recompute, setRecompute] = useState(false)
 
@@ -71,6 +73,8 @@ function App() {
           setIsAnimating={setIsAnimating}
           animationDone={animationDone}
           setAnimationDone={setAnimationDone}
+          chosenAlgorithm={chosenAlgorithm}
+          setChosenAlgorithm={setChosenAlgorithm}
           // initializeNodes={initializeNodes}
           // visualizationDone={visualizationDone}
           // setVisualizationDone={setVisualizationDone}
@@ -83,6 +87,7 @@ function App() {
 
           // resetNodes={resetNodes}
         />
+        <Information chosenAlgorithm={chosenAlgorithm} />
         <Grid
           totalRows={TOTAL_ROWS}
           totalCols={TOTAL_COLS}

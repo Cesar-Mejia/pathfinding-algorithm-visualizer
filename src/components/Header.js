@@ -15,6 +15,8 @@ function Header({
   setIsAnimating,
   animationDone,
   setAnimationDone,
+  chosenAlgorithm,
+  setChosenAlgorithm,
   // initializeNodes,
   visualizationDone,
   setVisualizationDone,
@@ -30,7 +32,6 @@ function Header({
   const [nodes, setNodes] = useContext(nodesContext)
   const [visitedNodes, setVisitedNodes] = useState([])
   const [shortestPath, setShortestPath] = useState([])
-  const [chosenAlgorithm, setChosenAlgorithm] = useState("Dijkstra's")
 
   useEffect(() => {
     activateAlgorithm()
@@ -149,7 +150,12 @@ function Header({
           <Navbar.Brand>Pathifinding Algorithm Visualizer</Navbar.Brand>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <NavDropdown title="Algorithms" id="basic-nav-dropdown" disabled={isAnimating}>
+              <NavDropdown
+                title="Algorithms"
+                id="basic-nav-dropdown"
+                className="nav-dropdown"
+                disabled={isAnimating}
+              >
                 <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>Dijkstra's</NavDropdown.Item>
                 <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>A*</NavDropdown.Item>
                 <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>Depth First</NavDropdown.Item>
@@ -157,10 +163,9 @@ function Header({
               </NavDropdown>
               <Button
                 variant="light"
-                className="btn animated"
                 onClick={animateAlgorithm}
                 disabled={isAnimating}
-              >{`Visualize ${chosenAlgorithm}!`}</Button>
+              >{`Visualize!`}</Button>
               <Button variant="dark" onClick={clearBoard} disabled={isAnimating}>
                 {`Clear Board`}{' '}
               </Button>
