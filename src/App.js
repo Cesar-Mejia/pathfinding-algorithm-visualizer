@@ -1,9 +1,8 @@
 import './App.css'
-import { useState, createContext, useRef, useEffect } from 'react'
+import { useState, createContext, useRef } from 'react'
 import Header from './components/Header'
 import Grid from './components/Grid'
 import Information from './components/Information'
-// import { dijkstra, aStar, DFS_recursive } from './algorithms'
 
 export const nodesContext = createContext()
 
@@ -11,22 +10,15 @@ function App() {
   const CELL_DIMENSIONS = 25
   const TOTAL_ROWS = Math.floor(window.innerHeight / CELL_DIMENSIONS) - 8
   const TOTAL_COLS = Math.floor(window.innerWidth / CELL_DIMENSIONS) - 1
-  // const TOTAL_ROWS = 4
-  // const TOTAL_COLS = 4
 
   const INITIAL_ROW = Math.floor(TOTAL_ROWS / 2)
   const INITIAL_START_COL = Math.floor(TOTAL_COLS / 4)
   const INITIAL_END_COL = TOTAL_COLS - INITIAL_START_COL
 
-  // const [startNode, setStartNode] = useState(`r${INITIAL_ROW}c${INITIAL_START_COL}`)
-  // const [endNode, setEndNode] = useState(`r${INITIAL_ROW}c${INITIAL_END_COL}`)
-
   const [nodes, setNodes] = useState(initializeNodes())
   const [isAnimating, setIsAnimating] = useState(false)
-  const [animationDone, setAnimationDone] = useState(true)
+  const [animationDone, setAnimationDone] = useState(false)
   const [chosenAlgorithm, setChosenAlgorithm] = useState("Dijkstra's")
-
-  // const [recompute, setRecompute] = useState(false)
 
   const nodeRefs = useRef({})
 
@@ -64,8 +56,6 @@ function App() {
     <nodesContext.Provider value={[nodes, setNodes]}>
       <div className="App">
         <Header
-          // startNode={startNode}
-          // endNode={endNode}
           totalRows={TOTAL_ROWS}
           totalCols={TOTAL_COLS}
           nodeRefs={nodeRefs}
@@ -75,35 +65,16 @@ function App() {
           setAnimationDone={setAnimationDone}
           chosenAlgorithm={chosenAlgorithm}
           setChosenAlgorithm={setChosenAlgorithm}
-          // initializeNodes={initializeNodes}
-          // visualizationDone={visualizationDone}
-          // setVisualizationDone={setVisualizationDone}
-          // chosenAlgorithm={chosenAlgorithm}
-          // setChosenAlgorithm={setChosenAlgorithm}
-          // visitedNodes={visitedNodes}
-          // setVisitedNodes={setVisitedNodes}
-          // shortestPath={shortestPath}
-          // setShortestPath={setShortestPath}
-
-          // resetNodes={resetNodes}
         />
         <Information chosenAlgorithm={chosenAlgorithm} />
         <Grid
           totalRows={TOTAL_ROWS}
           totalCols={TOTAL_COLS}
-          // startNode={startNode}
-          // endNode={endNode}
-          // setStartNode={setStartNode}
-          // setEndNode={setEndNode}
           nodeRefs={nodeRefs}
           isAnimating={isAnimating}
           setIsAnimating={setIsAnimating}
           animationDone={animationDone}
           setAnimationDone={setAnimationDone}
-          // reComputeAlgorithm={reComputeAlgorithm}
-          // visualizationDone={visualizationDone}
-          // setVisualizationDone={setVisualizationDone}
-          // setRecompute={setRecompute}
         />
       </div>
     </nodesContext.Provider>

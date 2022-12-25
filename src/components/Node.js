@@ -30,7 +30,6 @@ function Node({
       onMouseUp={onMouseUp}
       onMouseDown={e => onMouseDown(e)}
       onMouseEnter={e => handleMouseEnter(e)}
-      // onAnimationEnd={isEndNode}
     ></td>
   )
 }

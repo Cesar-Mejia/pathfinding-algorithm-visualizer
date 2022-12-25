@@ -4,23 +4,7 @@ import { startNode, endNode } from '../algorithms'
 import Node from './Node'
 import './Grid.css'
 
-function Grid({
-  totalRows,
-  totalCols,
-  // startNode,
-  // endNode,
-  // setStartNode,
-  // setEndNode,
-  nodeRefs,
-  isAnimating,
-  setIsAnimating,
-  animationDone,
-  setAnimationDone
-  // visualizationDone,
-  // reComputeAlgorithm,
-  // setVisualizationDone
-  // setRecompute
-}) {
+function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setIsAnimating, setAnimationDone }) {
   const [nodes, setNodes] = useContext(nodesContext)
 
   const [startNodePressed, setStartNodePressed] = useState(false)
@@ -36,11 +20,9 @@ function Grid({
   function resetStartNode(newStartNode) {
     let newNodes = { ...nodes }
     let prevStartNode = startNode(nodes)
-    // for (let node in newNodes) {
-    // if (newNodes[node].isStartNode) {
+
     newNodes[prevStartNode].isStartNode = false
-    // }
-    // }
+
     newNodes[newStartNode].isStartNode = true
     setNodes(newNodes)
   }
@@ -48,11 +30,9 @@ function Grid({
   function resetEndNode(newEndNode) {
     let newNodes = { ...nodes }
     let prevEndNode = endNode(nodes)
-    // for (let node in newNodes) {
-    // if (newNodes[node].isStartNode) {
+
     newNodes[prevEndNode].isEndNode = false
-    // }
-    // }
+
     newNodes[newEndNode].isEndNode = true
     setNodes(newNodes)
   }
@@ -60,9 +40,6 @@ function Grid({
   function onMouseDown(e) {
     setMouseIsPressed(true)
     const pressedNode = e.target.id
-    // console.log(nodes[pressedNode])
-    // if (pressedNode === startNode) setStartNodePressed(true)
-    // if (pressedNode === nodes.startNode) setStartNodePressed(true)
 
     if (nodes[pressedNode].isEndNode) setEndNodePressed(true)
     if (nodes[pressedNode].isStartNode) setStartNodePressed(true)
@@ -72,20 +49,14 @@ function Grid({
   }
 
   function onMouseEnter(e) {
-    // if (!mouseIsPressed) return
-    // if (!mouseIsPressed) return
     const enteredNode = e.target.id
 
     if (startNodePressed && !nodes[enteredNode].isWallNode && !nodes[enteredNode].isEndNode) {
       resetStartNode(enteredNode)
-      // setStartNode(e.target.id)
-      // if (visualizationDone) setRecompute(prev => !prev)
     }
 
     if (endNodePressed && !nodes[enteredNode].isWallNode && !nodes[enteredNode].isStartNode) {
       resetEndNode(enteredNode)
-      // setEndNode(e.target.id)
-      // if (visualizationDone) setRecompute(prev => !prev)
     }
 
     if (
@@ -95,7 +66,6 @@ function Grid({
       !nodes[enteredNode].isEndNode
     ) {
       toggleWallNode(enteredNode)
-      // if (visualizationDone) setRecompute(prev => !prev)
     }
   }
 

@@ -6,8 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './Header.css'
 
 function Header({
-  // startNode,
-  // endNode,
   totalRows,
   totalCols,
   nodeRefs,
@@ -16,33 +14,21 @@ function Header({
   animationDone,
   setAnimationDone,
   chosenAlgorithm,
-  setChosenAlgorithm,
-  // initializeNodes,
-  visualizationDone,
-  setVisualizationDone,
-  // chosenAlgorithm,
-  // setChosenAlgorithm,
-  // visitedNodes,
-  // setVisitedNodes,
-  // shortestPath,
-  // setShortestPath,
-
-  resetNodes
+  setChosenAlgorithm
 }) {
   const [nodes, setNodes] = useContext(nodesContext)
   const [visitedNodes, setVisitedNodes] = useState([])
   const [shortestPath, setShortestPath] = useState([])
 
   useEffect(() => {
-    if (visitedNodes.length) {
-      activateAlgorithm()
-    }
+    activateAlgorithm()
   }, [nodes, chosenAlgorithm])
 
-  useEffect(() => {}, [visitedNodes])
-
-  // Initial -> Don't want to activate algorithm (only when button is pressed)[animationDone]
-  // Once button is pressed (animationDone) if nodes changes, activate algorithm & recompute
+  useEffect(() => {
+    if (animationDone) {
+      recomputeColors()
+    }
+  }, [visitedNodes])
 
   function animateAlgorithm() {
     setIsAnimating(true)
@@ -167,7 +153,7 @@ function Header({
               </NavDropdown>
               <Button
                 variant="light"
-                onClick={activateAlgorithm}
+                onClick={animateAlgorithm}
                 disabled={isAnimating}
               >{`Visualize!`}</Button>
               <Button variant="dark" onClick={clearBoard} disabled={isAnimating}>
