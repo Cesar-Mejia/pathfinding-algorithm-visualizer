@@ -23,7 +23,7 @@ function App() {
 
   const [nodes, setNodes] = useState(initializeNodes())
   const [isAnimating, setIsAnimating] = useState(false)
-  const [animationDone, setAnimationDone] = useState(false)
+  const [animationDone, setAnimationDone] = useState(true)
   const [chosenAlgorithm, setChosenAlgorithm] = useState("Dijkstra's")
 
   // const [recompute, setRecompute] = useState(false)
@@ -111,3 +111,6 @@ function App() {
 }
 
 export default App
+
+// Change the computation of the algorithm to button press
+// Add compare functionality

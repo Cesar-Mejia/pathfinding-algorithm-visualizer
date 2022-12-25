@@ -1,7 +1,7 @@
 import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap'
 import { useState, useContext, useEffect } from 'react'
 import { nodesContext } from '../App'
-import { dijkstra, aStar, DFS_recursive } from '../algorithms'
+import { dijkstra, aStar, DFS_recursive, DFS_iterative } from '../algorithms'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Header.css'
 
@@ -34,12 +34,15 @@ function Header({
   const [shortestPath, setShortestPath] = useState([])
 
   useEffect(() => {
-    activateAlgorithm()
+    if (visitedNodes.length) {
+      activateAlgorithm()
+    }
   }, [nodes, chosenAlgorithm])
 
-  useEffect(() => {
-    if (animationDone) recomputeColors()
-  }, [shortestPath])
+  useEffect(() => {}, [visitedNodes])
+
+  // Initial -> Don't want to activate algorithm (only when button is pressed)[animationDone]
+  // Once button is pressed (animationDone) if nodes changes, activate algorithm & recompute
 
   function animateAlgorithm() {
     setIsAnimating(true)
@@ -79,23 +82,24 @@ function Header({
     switch (chosenAlgorithm) {
       case "Dijkstra's":
         const dijstraResults = dijkstra(nodes, totalRows, totalCols)
-        setVisitedNodes(dijstraResults.visitedNodes)
         setShortestPath(dijstraResults.shortestPath)
+        setVisitedNodes(dijstraResults.visitedNodes)
+
         break
       case 'A*':
         const aStarResults = aStar(nodes, totalRows, totalCols)
-        setVisitedNodes(aStarResults.visitedNodes)
         setShortestPath(aStarResults.shortestPath)
+        setVisitedNodes(aStarResults.visitedNodes)
         break
       case 'Depth First':
         const dfsResults = DFS_recursive(nodes, totalRows, totalCols)
-        setVisitedNodes(dfsResults.visitedNodes)
         setShortestPath(dfsResults.shortestPath)
+        setVisitedNodes(dfsResults.visitedNodes)
         break
       case 'Breadth First':
         const breadthFirstResults = dijkstra(nodes, totalRows, totalCols)
-        setVisitedNodes(breadthFirstResults.visitedNodes)
         setShortestPath(breadthFirstResults.shortestPath)
+        setVisitedNodes(breadthFirstResults.visitedNodes)
         break
     }
   }
@@ -163,7 +167,7 @@ function Header({
               </NavDropdown>
               <Button
                 variant="light"
-                onClick={animateAlgorithm}
+                onClick={activateAlgorithm}
                 disabled={isAnimating}
               >{`Visualize!`}</Button>
               <Button variant="dark" onClick={clearBoard} disabled={isAnimating}>

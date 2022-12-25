@@ -175,12 +175,16 @@ export function DFS_recursive(prevNodes, totalRows, totalCols) {
   let finish = endNode(nodes)
   let result = []
   let visited = {}
+  let shortestPath = []
 
   function dfs(vertex) {
     result.push(vertex)
     visited[vertex] = true
 
     let adjacentNodes = calculateAdjacentNodes(vertex, nodes, totalRows, totalCols)
+    let unvisitedAdjacentNodes = adjacentNodes.filter(node => !visited[node])
+    if (unvisitedAdjacentNodes.length || vertex === finish) shortestPath.push(vertex)
+
     adjacentNodes.forEach(neighbor => {
       if (!visited[neighbor]) {
         dfs(neighbor)
@@ -189,11 +193,13 @@ export function DFS_recursive(prevNodes, totalRows, totalCols) {
   }
   dfs(start)
 
-  let finishIdx, visitedNodes, shortestPath
+  let finishIdx_result, finishIdx_shortestPath, visitedNodes
+
   if (result.includes(finish)) {
-    finishIdx = result.indexOf(finish)
-    visitedNodes = result.slice(0, finishIdx + 1)
-    shortestPath = visitedNodes
+    finishIdx_result = result.indexOf(finish)
+    finishIdx_shortestPath = shortestPath.indexOf(finish)
+    visitedNodes = result.slice(0, finishIdx_result + 1)
+    shortestPath = shortestPath.slice(0, finishIdx_shortestPath + 1)
   } else {
     visitedNodes = result
     shortestPath = []
