@@ -3,23 +3,6 @@ import Figure from 'react-bootstrap/Figure'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Information.css'
 function Information({ chosenAlgorithm }) {
-  function displayAlgorithm() {
-    switch (chosenAlgorithm) {
-      case "Dijkstra's":
-        return "Dijkstra's Algorithm"
-        break
-      case 'A*':
-        return 'A* Search Algorithm'
-        break
-      case 'Depth First':
-        return 'Depth First Search'
-        break
-      case 'Breadth First':
-        return 'Breadth First Search'
-        break
-    }
-  }
-
   return (
     <div className="info-container">
       <div className="info d-flex justify-content-around">
@@ -53,7 +36,7 @@ function Information({ chosenAlgorithm }) {
         </Figure>
       </div>
       <p className="info-current-algorithm">
-        <span style={{ fontWeight: 'bold' }}>Current Algorithm:</span> {displayAlgorithm()}
+        <span style={{ fontWeight: 'bold' }}>Current Algorithm:</span> {chosenAlgorithm}
       </p>
     </div>
   )

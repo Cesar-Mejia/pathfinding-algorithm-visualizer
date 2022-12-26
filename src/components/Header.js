@@ -1,7 +1,7 @@
 import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap'
 import { useState, useContext, useEffect } from 'react'
 import { nodesContext } from '../App'
-import { dijkstra, aStar, DFS_recursive, DFS_iterative } from '../algorithms'
+import { dijkstra, aStar, DFS_recursive, greedy_BFS } from '../algorithms'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Header.css'
 
@@ -66,26 +66,31 @@ function Header({
 
   function activateAlgorithm() {
     switch (chosenAlgorithm) {
-      case "Dijkstra's":
+      case "Dijkstra's Algorithm":
         const dijstraResults = dijkstra(nodes, totalRows, totalCols)
         setShortestPath(dijstraResults.shortestPath)
         setVisitedNodes(dijstraResults.visitedNodes)
-
         break
-      case 'A*':
+      case 'A* Search Algorithm':
         const aStarResults = aStar(nodes, totalRows, totalCols)
         setShortestPath(aStarResults.shortestPath)
         setVisitedNodes(aStarResults.visitedNodes)
         break
-      case 'Depth First':
+      case 'Depth First Search':
         const dfsResults = DFS_recursive(nodes, totalRows, totalCols)
         setShortestPath(dfsResults.shortestPath)
         setVisitedNodes(dfsResults.visitedNodes)
         break
-      case 'Breadth First':
+      case 'Breadth First Search':
         const breadthFirstResults = dijkstra(nodes, totalRows, totalCols)
         setShortestPath(breadthFirstResults.shortestPath)
         setVisitedNodes(breadthFirstResults.visitedNodes)
+        break
+      case 'Greedy Best First Search':
+        console.log('greedy')
+        const greedy_BFSResults = greedy_BFS(nodes, totalRows, totalCols)
+        setShortestPath(greedy_BFSResults.shortestPath)
+        setVisitedNodes(greedy_BFSResults.visitedNodes)
         break
     }
   }
@@ -146,10 +151,21 @@ function Header({
                 className="nav-dropdown"
                 disabled={isAnimating}
               >
-                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>Dijkstra's</NavDropdown.Item>
-                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>A*</NavDropdown.Item>
-                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>Depth First</NavDropdown.Item>
-                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>Breadth First</NavDropdown.Item>
+                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>
+                  Dijkstra's Algorithm
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>
+                  A* Search Algorithm
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>
+                  Greedy Best First Search
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>
+                  Breadth First Search
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={e => chooseAlgorithm(e)}>
+                  Depth First Search
+                </NavDropdown.Item>
               </NavDropdown>
               <Button
                 variant="light"

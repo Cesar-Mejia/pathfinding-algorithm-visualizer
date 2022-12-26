@@ -69,6 +69,7 @@ export function dijkstra(prevNodes, totalRows, totalCols) {
   let nodes = resetNodes(prevNodes)
   let start = startNode(nodes)
   let finish = endNode(nodes)
+
   let visitedNodes = []
   let shortestPath = []
   const queueNodes = new priorityQueue()
@@ -126,15 +127,15 @@ export function aStar(prevNodes, totalRows, totalCols) {
 
   let visitedNodes = []
   let shortestPath = []
-  let openSet = new priorityQueue()
+  let queue = new priorityQueue()
   let current
 
-  openSet.enqueue(start, 0)
+  queue.enqueue(start, 0)
   nodes[start].gScore = 0
   nodes[start].fScore = heuristic(nodes, start, finish)
 
-  while (openSet.values.length) {
-    current = openSet.dequeue().value
+  while (queue.values.length) {
+    current = queue.dequeue().value
     visitedNodes.push(current)
 
     if (current === finish) {
@@ -142,29 +143,22 @@ export function aStar(prevNodes, totalRows, totalCols) {
         shortestPath.push(current)
         current = nodes[current].previous
       }
+      shortestPath.push(current)
+      break
     }
 
     let adjacentNodes = calculateAdjacentNodes(current, nodes, totalRows, totalCols)
 
     for (let neighbor of adjacentNodes) {
-      let tempGscore = nodes[current].gScore + 1
-      if (tempGscore < nodes[neighbor].gScore) {
+      if (nodes[neighbor].gScore === Infinity) {
+        nodes[neighbor].gScore = nodes[current].gScore + 1
+        nodes[neighbor].fScore = nodes[neighbor].gScore + heuristic(nodes, neighbor, finish)
         nodes[neighbor].previous = current
-        nodes[neighbor].gScore = tempGscore
-        nodes[neighbor].fScore = tempGscore + heuristic(nodes, neighbor, finish)
-        if (!openSet.valuesArray().includes(neighbor)) {
-          openSet.enqueue(neighbor, nodes[neighbor].fScore)
+        if (!queue.valuesArray().includes(neighbor)) {
+          queue.enqueue(neighbor, nodes[neighbor].fScore)
         }
       }
     }
-  }
-  let finishIdx
-  if (visitedNodes.includes(finish)) {
-    finishIdx = visitedNodes.indexOf(finish)
-    visitedNodes = visitedNodes.slice(0, finishIdx + 1)
-    shortestPath = shortestPath.concat(start).reverse()
-  } else {
-    shortestPath = []
   }
   return { visitedNodes, shortestPath }
 }
@@ -205,5 +199,47 @@ export function DFS_recursive(prevNodes, totalRows, totalCols) {
     shortestPath = []
   }
 
+  return { visitedNodes, shortestPath }
+}
+
+export function greedy_BFS(prevNodes, totalRows, totalCols) {
+  let nodes = resetNodes(prevNodes)
+  let start = startNode(nodes)
+  let finish = endNode(nodes)
+
+  let visitedNodes = []
+  let shortestPath = []
+  let queue = new priorityQueue()
+  let current
+
+  queue.enqueue(start, 0)
+  nodes[start].gScore = 0
+  nodes[start].fScore = heuristic(nodes, start, finish)
+
+  while (queue.values.length) {
+    current = queue.dequeue().value
+    visitedNodes.push(current)
+
+    if (current === finish) {
+      while (nodes[current].previous) {
+        shortestPath.push(current)
+        current = nodes[current].previous
+      }
+      shortestPath.push(current)
+      break
+    }
+
+    let adjacentNodes = calculateAdjacentNodes(current, nodes, totalRows, totalCols)
+
+    for (let neighbor of adjacentNodes) {
+      if (nodes[neighbor].fScore === Infinity) {
+        nodes[neighbor].fScore = heuristic(nodes, neighbor, finish)
+        nodes[neighbor].previous = current
+        if (!queue.valuesArray().includes(neighbor)) {
+          queue.enqueue(neighbor, nodes[neighbor].fScore)
+        }
+      }
+    }
+  }
   return { visitedNodes, shortestPath }
 }

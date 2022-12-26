@@ -11,6 +11,9 @@ function App() {
   const TOTAL_ROWS = Math.floor(window.innerHeight / CELL_DIMENSIONS) - 8
   const TOTAL_COLS = Math.floor(window.innerWidth / CELL_DIMENSIONS) - 1
 
+  // const TOTAL_ROWS = 4
+  // const TOTAL_COLS = 4
+
   const INITIAL_ROW = Math.floor(TOTAL_ROWS / 2)
   const INITIAL_START_COL = Math.floor(TOTAL_COLS / 4)
   const INITIAL_END_COL = TOTAL_COLS - INITIAL_START_COL
