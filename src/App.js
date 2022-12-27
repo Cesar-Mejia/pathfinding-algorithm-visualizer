@@ -7,6 +7,7 @@ import Information from './components/Information'
 export const nodesContext = createContext()
 
 function App() {
+  console.log('app rendered')
   const CELL_DIMENSIONS = 25
   const TOTAL_ROWS = Math.floor(window.innerHeight / CELL_DIMENSIONS) - 8
   const TOTAL_COLS = Math.floor(window.innerWidth / CELL_DIMENSIONS) - 1
@@ -21,7 +22,8 @@ function App() {
   const [nodes, setNodes] = useState(initializeNodes())
   const [isAnimating, setIsAnimating] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
-  const [chosenAlgorithm, setChosenAlgorithm] = useState("Dijkstra's")
+  const [chosenAlgorithm, setChosenAlgorithm] = useState("Dijkstra's Algorithm")
+  const [selectedMaze, setSelectedMaze] = useState(null)
 
   const nodeRefs = useRef({})
 
@@ -68,8 +70,9 @@ function App() {
           setAnimationDone={setAnimationDone}
           chosenAlgorithm={chosenAlgorithm}
           setChosenAlgorithm={setChosenAlgorithm}
+          setSelectedMaze={setSelectedMaze}
         />
-        <Information chosenAlgorithm={chosenAlgorithm} />
+        <Information chosenAlgorithm={chosenAlgorithm} selectedMaze={selectedMaze} />
         <Grid
           totalRows={TOTAL_ROWS}
           totalCols={TOTAL_COLS}

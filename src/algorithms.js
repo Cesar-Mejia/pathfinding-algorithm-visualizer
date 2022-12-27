@@ -42,7 +42,7 @@ function resetNodes(prevNodes) {
   return newNodes
 }
 
-function calculateAdjacentNodes(node, nodes, totalRows, totalCols) {
+export function calculateAdjacentNodes(node, nodes, totalRows, totalCols) {
   let currentNode = nodes[node]
   let adjacentNodes = []
   let nodeAbove = `r${currentNode.row - 1}c${currentNode.col}`

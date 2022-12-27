@@ -2,6 +2,7 @@ import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap'
 import { useState, useContext, useEffect } from 'react'
 import { nodesContext } from '../App'
 import { dijkstra, aStar, DFS_recursive, greedy_BFS } from '../algorithms'
+import { borderNodes, recursiveBacktrackingm, randomWallNodes } from '../mazes'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Header.css'
 
@@ -14,11 +15,14 @@ function Header({
   animationDone,
   setAnimationDone,
   chosenAlgorithm,
-  setChosenAlgorithm
+  setChosenAlgorithm,
+  setSelectedMaze
 }) {
   const [nodes, setNodes] = useContext(nodesContext)
   const [visitedNodes, setVisitedNodes] = useState([])
   const [shortestPath, setShortestPath] = useState([])
+
+  // const [mazeNodes, setMazeNodes] = useState(null)
 
   useEffect(() => {
     activateAlgorithm()
@@ -65,6 +69,7 @@ function Header({
   }
 
   function activateAlgorithm() {
+    console.log('activate algorithm')
     switch (chosenAlgorithm) {
       case "Dijkstra's Algorithm":
         const dijstraResults = dijkstra(nodes, totalRows, totalCols)
@@ -109,6 +114,7 @@ function Header({
 
   function clearBoard() {
     setAnimationDone(false)
+    setSelectedMaze(null)
     clearAnimations()
     let newNodes = { ...nodes }
     for (let node in newNodes) {
@@ -137,6 +143,41 @@ function Header({
       node1Element.className = currentClass1 + ' node-visited-recompute'
     }
   }
+
+  function handleMazeSelection(e) {
+    clearBoard()
+    let result = randomWallNodes(nodes, totalRows, totalCols)
+    let newNodes = { ...nodes }
+    for (let i = 0; i < result.length; i++) {
+      let node = result[i]
+      newNodes[node].isWallNode = true
+    }
+    setNodes(newNodes)
+    setSelectedMaze(e.target.innerHTML)
+  }
+
+  // function animateMaze() {}
+
+  // useEffect(() => {
+  //   if (mazeNodes) {
+  //     let newNodes = { ...nodes }
+
+  //     for (let i = 0; i <= mazeNodes.length; i++) {
+  //       if (i === mazeNodes.length) {
+  //         setNodes(newNodes)
+  //         break
+  //       }
+  //       setTimeout(() => {
+  //         if (i === mazeNodes.length - 1) console.log('animating')
+  //         const node = mazeNodes[i]
+  //         const nodeElement = nodeRefs.current[node]
+  //         const currentClass = nodeElement.className
+  //         nodeElement.className = currentClass + ' node-wall-animated'
+  //         newNodes[node].isWallNode = true
+  //       }, 10 * i)
+  //     }
+  //   }
+  // }, [mazeNodes])
 
   return (
     <header>
@@ -167,11 +208,22 @@ function Header({
                   Depth First Search
                 </NavDropdown.Item>
               </NavDropdown>
+
               <Button
                 variant="light"
                 onClick={animateAlgorithm}
                 disabled={isAnimating}
               >{`Visualize!`}</Button>
+              <NavDropdown
+                title="Add Maze"
+                id="basic-nav-dropdown"
+                className="nav-dropdown"
+                disabled={isAnimating}
+              >
+                <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
+                  Random Walls
+                </NavDropdown.Item>
+              </NavDropdown>
               <Button variant="dark" onClick={clearBoard} disabled={isAnimating}>
                 {`Clear Board`}{' '}
               </Button>

@@ -44,3 +44,9 @@
 .caption {
   color: black;
 }
+
+.current-selections {
+  display: flex;
+   /* flex-direction: row; */
+  justify-content: space-evenly; 
+}
