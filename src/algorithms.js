@@ -241,5 +241,6 @@ export function greedy_BFS(prevNodes, totalRows, totalCols) {
       }
     }
   }
+  shortestPath = shortestPath.reverse()
   return { visitedNodes, shortestPath }
 }

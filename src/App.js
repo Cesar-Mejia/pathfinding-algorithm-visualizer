@@ -7,7 +7,6 @@ import Information from './components/Information'
 export const nodesContext = createContext()
 
 function App() {
-  console.log('app rendered')
   const CELL_DIMENSIONS = 25
   const TOTAL_ROWS = Math.floor(window.innerHeight / CELL_DIMENSIONS) - 8
   const TOTAL_COLS = Math.floor(window.innerWidth / CELL_DIMENSIONS) - 1
