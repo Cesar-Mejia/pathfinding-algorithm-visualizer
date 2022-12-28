@@ -188,7 +188,7 @@ function Header({
       case 'Recursive Back Tracking (Wide)':
         result = recursiveBackTracking(nodes, totalRows, totalCols)
         break
-      case 'Aldous-Broder':
+      case 'Aldous-Broder Maze':
         result = aldousBroder(nodes, totalRows, totalCols)
         break
       case 'Recursive Back Tracking (Narrow)':
@@ -261,7 +261,7 @@ function Header({
                   Recursive Back Tracking (Narrow)
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
-                  Aldous-Broder
+                  Aldous-Broder Maze
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
                   Random Wall Nodes
