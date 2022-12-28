@@ -4,7 +4,7 @@ import { startNode, endNode } from '../algorithms'
 import Node from './Node'
 import './Grid.css'
 
-function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setIsAnimating, setAnimationDone }) {
+function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setAnimationDone }) {
   const [nodes, setNodes] = useContext(nodesContext)
 
   const [startNodePressed, setStartNodePressed] = useState(false)
@@ -105,18 +105,15 @@ function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setIsAnimating, set
     return rows
   }
 
-  function handleAnimationEnd(e) {
-    if (e.target.id !== endNode(nodes)) return
-    setTimeout(() => {
-      setIsAnimating(false)
-    }, 400)
-    setAnimationDone(true)
-  }
+  // function handleAnimationEnd(e) {
+  //   if (e.target.id !== endNode(nodes)) return
+  //   setAnimationDone(true)
+  // }
 
   return (
     <table
       className="grid"
-      onAnimationEnd={isAnimating ? e => handleAnimationEnd(e) : null}
+      // onAnimationEnd={isAnimating ? e => handleAnimationEnd(e) : null}
       style={isAnimating ? { pointerEvents: 'none' } : {}}
     >
       {<tbody>{buildGrid()}</tbody>}

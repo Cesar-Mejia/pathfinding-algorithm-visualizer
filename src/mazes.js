@@ -39,100 +39,38 @@ export function borderNodes(nodes, totalRows, totalCols) {
 
 export function binaryTree(nodes, totalRows, totalCols) {
   let border = borderNodes(nodes, totalRows, totalCols)
+  let odd_cols = oddColumns(nodes, totalRows, totalCols)
+  let odd_rows = oddRows(nodes, totalRows, totalCols)
+  let totalWalls = border.concat(odd_cols).concat(odd_rows)
+  let emptyNodes = []
   let path = []
-  let wallNodes = []
+
   for (let node in nodes) {
-    if (!border.includes(node)) {
-      let adjacentNodes = []
-      let nodeRight = `r${nodes[node].row}c${nodes[node].col + 1}`
-      let nodeBelow = `r${nodes[node].row + 1}c${nodes[node].col}`
+    if (!totalWalls.includes(node)) emptyNodes.push(node)
+  }
+  // let result = new Set(totalWalls)
 
-      if (nodes[node].col !== totalCols && !border.includes(node)) {
-        adjacentNodes.push(nodeRight)
-      }
-      if (nodes[node].row !== totalRows && !border.includes(node)) {
-        adjacentNodes.push(nodeBelow)
-      }
+  for (let node of emptyNodes) {
+    let nodeRight = `r${nodes[node].row}c${nodes[node].col + 1}`
+    let nodeBelow = `r${nodes[node].row + 1}c${nodes[node].col}`
+    let adjacentNodes = []
 
-      if (adjacentNodes.length) {
-        const randomIndex = Math.floor(Math.random() * adjacentNodes.length)
-        const item = adjacentNodes[randomIndex]
-        path.push(item)
-      }
+    if (nodes[node].col !== totalCols - 1) {
+      adjacentNodes.push(nodeRight)
+    }
+    if (nodes[node].row !== totalRows - 1) {
+      adjacentNodes.push(nodeBelow)
+    }
+
+    if (adjacentNodes.length) {
+      const randomIndex = Math.floor(Math.random() * adjacentNodes.length)
+      const item = adjacentNodes[randomIndex]
+      path.push(item)
     }
   }
-  for (let node in nodes) {
-    if (!path.includes(node) && !nodes[node].isStartNode && !nodes[node].isEndNode)
-      wallNodes.push(node)
-  }
-  return border.concat(wallNodes)
+
+  return totalWalls.filter(wallNode => !path.includes(wallNode))
 }
-
-// export function recursiveBackTracking(currentNodes, totalRows, totalCols) {
-//   console.log('recursive backtracking')
-//   let result = []
-//   let visited = {}
-//   let nodes = currentNodes
-//   let start = 'r2c2'
-//   let path = [start]
-
-//   function dfs(currentNode) {
-//     result.push(currentNode)
-//     console.log('result', result)
-//     visited[currentNode] = true
-
-//     let adjacentNodes = calculateNeighboringNodes(currentNode, nodes, totalRows, totalCols)
-//     console.log('adjacentNodes', adjacentNodes)
-
-//     adjacentNodes.forEach(adjacentNode => {
-//       console.log(adjacentNode)
-//       // if (!visited[adjacentNode.node]) {
-//       if (adjacentNode.nodeAbove) {
-//         console.log('inside nodeAbove check')
-//         console.log('adjacentNode', adjacentNode)
-//         path.push(adjacentNode.nodeAbove)
-//         let current = adjacentNode.nodeAbove
-//         let currentNeighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
-//         let neighborAbove = currentNeighbors.filter(neighbor => neighbor['nodeAbove'])[0].nodeAbove
-//         dfs(neighborAbove)
-//       }
-//       if (adjacentNode.nodeBelow && !visited[adjacentNode.nodeBelow]) {
-//         path.push(adjacentNode.nodeBelow)
-//         let current = adjacentNode.nodeBelow
-//         let currentNeighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
-//         let neighborBelow = currentNeighbors.filter(neighbor => neighbor['nodeBelow'])[0].nodeBelow
-//         dfs(neighborBelow)
-//       }
-//       if (adjacentNode.nodeRight && !visited[adjacentNode.nodeRight]) {
-//         path.push(adjacentNode.nodeRight)
-//         let current = adjacentNode.nodeRight
-//         let currentNeighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
-//         let neighborRight = currentNeighbors.filter(neighbor => neighbor['nodeRight'])[0].nodeRight
-//         dfs(neighborRight)
-//       }
-//       if (adjacentNode.nodeLeft && !visited[adjacentNode.nodeLeft]) {
-//         path.push(adjacentNode.nodeLeft)
-//         let current = adjacentNode.nodeLeft
-//         let currentNeighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
-//         let neighborLeft = currentNeighbors.filter(neighbor => neighbor['nodeLeft'])[0].nodeLeft
-//         dfs(neighborLeft)
-//       }
-//       // }
-//     })
-//   }
-//   dfs(start)
-
-//   let wallNodes = []
-//   for (let node in nodes) {
-//     if (!path.includes(node) && !nodes[node].isStartNode && !nodes[node].isEndNode)
-//       wallNodes.push(node)
-//   }
-//   console.log('path', path)
-//   return wallNodes
-//   // let finishIdx = result.indexOf(finish)
-//   // visitedNodes = result.slice(0, finishIdx + 1)
-//   // finalPath = visitedNodes
-// }
 
 function shuffle(array) {
   let currentIndex = array.length,
@@ -161,15 +99,11 @@ export function recursiveBackTracking(nodes, totalRows, totalCols) {
   let path = [start]
 
   visited[start] = true
-  console.log(stack.length)
   while (stack.length) {
     currentNode = stack.pop()
     result.push(currentNode)
-    // path.push(currentNode)
 
     let adjacentNodes = calculateNeighboringNodes(currentNode, nodes, totalRows, totalCols)
-    console.log('adjacentNodes', adjacentNodes)
-    // adjacentNodes.forEach(adjacentNode => {
 
     while (adjacentNodes.length) {
       shuffle(adjacentNodes)
@@ -182,9 +116,6 @@ export function recursiveBackTracking(nodes, totalRows, totalCols) {
         }
       }
     }
-    // const randomIndex = Math.floor(Math.random() * adjacentNodes.length)
-
-    // })
   }
   let wallNodes = []
   for (let node in nodes) {
@@ -194,14 +125,129 @@ export function recursiveBackTracking(nodes, totalRows, totalCols) {
   return border.concat(wallNodes)
 }
 
+export function recursiveBackTracking_narrow(nodes, totalRows, totalCols) {
+  let border = borderNodes(nodes, totalRows, totalCols)
+  let odd_cols = oddColumns(nodes, totalRows, totalCols)
+  let odd_rows = oddRows(nodes, totalRows, totalCols)
+  let totalWalls = border.concat(odd_cols).concat(odd_rows)
+  let emptyNodes = Object.keys(nodes).filter(node => !totalWalls.includes(node))
+
+  let path = []
+  let visited = {}
+  let stack = []
+
+  let current = emptyNodes[Math.floor(Math.random() * emptyNodes.length)]
+  visited[current] = true
+  stack.push(current)
+
+  // stack.length
+  let count = 0
+  while (stack.length) {
+    count++
+    current = stack.pop()
+    // this function returns 2d array
+    let currentNeighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
+    let currentUnvisitedNeighbors = currentNeighbors.filter(neighbor => !visited[neighbor[0]])
+
+    if (currentUnvisitedNeighbors.length) {
+      stack.push(current)
+      let randomUnvisitedNeighbor =
+        currentUnvisitedNeighbors[Math.floor(Math.random() * currentUnvisitedNeighbors.length)]
+      path.push(randomUnvisitedNeighbor[1])
+      visited[randomUnvisitedNeighbor[0]] = true
+      stack.push(randomUnvisitedNeighbor[0])
+    }
+  }
+
+  return totalWalls.filter(wallNode => !path.includes(wallNode))
+}
+
 export function randomWallNodes(nodes, totalRows, totalCols) {
   let border = borderNodes(nodes, totalRows, totalCols)
   let wallNodes = []
   for (let node in nodes) {
     let randomNum = Math.floor(Math.random() * 10)
-    if (randomNum > 7 && !nodes[node].isStartNode && !nodes[node].isEndNode) {
+    if (randomNum > 6 && !nodes[node].isStartNode && !nodes[node].isEndNode) {
       wallNodes.push(node)
     }
   }
   return border.concat(wallNodes)
+}
+
+function randomRow(nodes, totalRows) {
+  let start = startNode(nodes)
+  let randomRow
+  do {
+    randomRow = Math.floor(Math.random() * totalRows + 1)
+  } while (randomRow === nodes[start].row)
+  return randomRow
+}
+
+function randomCol(nodes, totalCols) {
+  let start = startNode(nodes)
+  let randomCol
+  do {
+    randomCol = Math.floor(Math.random() * totalCols + 1)
+  } while (randomCol === nodes[start].col)
+  return randomCol
+}
+
+function oddColumns(nodes, totalRows, totalCols) {
+  let oddCols = []
+
+  for (let i = 1; i <= totalCols; i += 2) {
+    for (let j = 1; j <= totalRows; j++) {
+      oddCols.push(`r${j}c${i}`)
+    }
+  }
+  return oddCols
+}
+function oddRows(nodes, totalRows, totalCols) {
+  let oddRows = []
+
+  for (let i = 1; i <= totalRows; i += 2) {
+    for (let j = 1; j <= totalCols; j++) {
+      oddRows.push(`r${i}c${j}`)
+    }
+  }
+  return oddRows
+}
+export function aldousBroder(nodes, totalRows, totalCols) {
+  let border = borderNodes(nodes, totalRows, totalCols)
+  let odd_cols = oddColumns(nodes, totalRows, totalCols)
+  let odd_rows = oddRows(nodes, totalRows, totalCols)
+  let totalWalls = border.concat(odd_cols).concat(odd_rows)
+  let emptyNodes = []
+  let path = []
+
+  for (let node in nodes) {
+    if (!totalWalls.includes(node)) emptyNodes.push(node)
+  }
+  let visited = {}
+
+  let unvisitedNodes = [...emptyNodes]
+  let unvisitedNodesObj = {}
+  for (let node of unvisitedNodes) unvisitedNodesObj[node] = node
+
+  let current = unvisitedNodes[Math.floor(Math.random() * unvisitedNodes.length)]
+  visited[current] = true
+  delete unvisitedNodesObj[current]
+
+  let count = 0
+
+  while (Object.keys(unvisitedNodesObj).length) {
+    count++
+    // this function returns 2D array
+    let neighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
+    let randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)]
+
+    if (!visited[randomNeighbor[0]]) {
+      path.push(randomNeighbor[1])
+      visited[randomNeighbor[0]] = true
+      delete unvisitedNodesObj[randomNeighbor[0]]
+    }
+    current = randomNeighbor[0]
+  }
+  totalWalls = totalWalls.filter(wallNode => !path.includes(wallNode))
+  return totalWalls
 }

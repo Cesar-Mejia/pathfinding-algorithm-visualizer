@@ -160,6 +160,7 @@ export function aStar(prevNodes, totalRows, totalCols) {
       }
     }
   }
+  shortestPath = shortestPath.reverse()
   return { visitedNodes, shortestPath }
 }
 

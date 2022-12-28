@@ -2,7 +2,7 @@ import Figure from 'react-bootstrap/Figure'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Information.css'
-function Information({ chosenAlgorithm, selectedMaze }) {
+function Information({ chosenAlgorithm, selectedMaze, animationSpeed }) {
   return (
     <div className="info-container">
       <div className="info d-flex justify-content-around">
@@ -45,6 +45,9 @@ function Information({ chosenAlgorithm, selectedMaze }) {
             <span style={{ fontWeight: 'bold' }}>Current Maze:</span> {selectedMaze}
           </p>
         )}
+        <p className="info-current-algorithm">
+          <span style={{ fontWeight: 'bold' }}>Animation Speed:</span> {animationSpeed}
+        </p>
       </div>
     </div>
   )

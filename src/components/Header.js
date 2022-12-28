@@ -1,8 +1,14 @@
-import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap'
+import { Navbar, Container, Nav, NavDropdown, Button, Form } from 'react-bootstrap'
 import { useState, useContext, useEffect } from 'react'
 import { nodesContext } from '../App'
 import { dijkstra, aStar, DFS_recursive, greedy_BFS } from '../algorithms'
-import { randomWallNodes, binaryTree, recursiveBackTracking } from '../mazes'
+import {
+  randomWallNodes,
+  binaryTree,
+  recursiveBackTracking,
+  aldousBroder,
+  recursiveBackTracking_narrow
+} from '../mazes'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Header.css'
 
@@ -17,11 +23,15 @@ function Header({
   chosenAlgorithm,
   setChosenAlgorithm,
   selectedMaze,
-  setSelectedMaze
+  setSelectedMaze,
+  animationSpeed,
+  setAnimationSpeed
 }) {
   const [nodes, setNodes] = useContext(nodesContext)
   const [visitedNodes, setVisitedNodes] = useState([])
   const [shortestPath, setShortestPath] = useState([])
+
+  const [visitedSpeed, setVisitedSpeed] = useState(10)
 
   // const [mazeNodes, setMazeNodes] = useState(null)
 
@@ -35,6 +45,20 @@ function Header({
     }
   }, [visitedNodes])
 
+  useEffect(() => {
+    switch (animationSpeed) {
+      case 'Fast':
+        setVisitedSpeed(10)
+        break
+      case 'Medium':
+        setVisitedSpeed(20)
+        break
+      case 'Slow':
+        setVisitedSpeed(30)
+        break
+    }
+  }, [animationSpeed])
+
   function animateAlgorithm() {
     setIsAnimating(true)
     clearAnimations()
@@ -42,7 +66,7 @@ function Header({
       if (i === visitedNodes.length) {
         setTimeout(() => {
           animateShortestPath()
-        }, 10 * i)
+        }, visitedSpeed * i)
         return
       }
       setTimeout(() => {
@@ -50,18 +74,26 @@ function Header({
         const nodeElement = nodeRefs.current[node]
         const currentClass = nodeElement.className
         nodeElement.className = currentClass + ' node-visited'
-      }, 10 * i)
+      }, visitedSpeed * i)
     }
   }
 
   function animateShortestPath() {
+    if (shortestPath.length === 0) {
+      setIsAnimating(false)
+      setAnimationDone(true)
+    }
     for (let i = 0; i < shortestPath.length; i++) {
       setTimeout(() => {
         const node = shortestPath[i]
         const nodeElement = nodeRefs.current[node]
         const currentClass = nodeElement.className
         nodeElement.className = currentClass + ' node-final-path'
-      }, 50 * i)
+        if (i === shortestPath.length - 1) {
+          setIsAnimating(false)
+          setAnimationDone(true)
+        }
+      }, visitedSpeed * 5 * i)
     }
   }
 
@@ -92,7 +124,6 @@ function Header({
         setVisitedNodes(breadthFirstResults.visitedNodes)
         break
       case 'Greedy Best First Search':
-        console.log('greedy')
         const greedy_BFSResults = greedy_BFS(nodes, totalRows, totalCols)
         setShortestPath(greedy_BFSResults.shortestPath)
         setVisitedNodes(greedy_BFSResults.visitedNodes)
@@ -154,9 +185,14 @@ function Header({
       case 'Random Wall Nodes':
         result = randomWallNodes(nodes, totalRows, totalCols)
         break
-      case 'Recursive Back Tracking':
+      case 'Recursive Back Tracking (Wide)':
         result = recursiveBackTracking(nodes, totalRows, totalCols)
-        console.log(result)
+        break
+      case 'Aldous-Broder':
+        result = aldousBroder(nodes, totalRows, totalCols)
+        break
+      case 'Recursive Back Tracking (Narrow)':
+        result = recursiveBackTracking_narrow(nodes, totalRows, totalCols)
         break
     }
 
@@ -168,6 +204,10 @@ function Header({
 
     setNodes(newNodes)
     setSelectedMaze(e.target.innerHTML)
+  }
+
+  function handleAnimationSpeed(e) {
+    setAnimationSpeed(e.target.innerHTML)
   }
 
   return (
@@ -212,10 +252,16 @@ function Header({
                 disabled={isAnimating}
               >
                 <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
-                  Recursive Back Tracking
+                  Binary Tree Maze
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
-                  Binary Tree Maze
+                  Recursive Back Tracking (Wide)
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
+                  Recursive Back Tracking (Narrow)
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
+                  Aldous-Broder
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={e => handleMazeSelection(e)}>
                   Random Wall Nodes
@@ -224,6 +270,16 @@ function Header({
               <Button variant="dark" onClick={clearBoard} disabled={isAnimating}>
                 {`Clear Board`}{' '}
               </Button>
+              <NavDropdown
+                title="Animation Speed"
+                id="basic-nav-dropdown"
+                className="nav-dropdown animation-speed"
+                disabled={isAnimating}
+              >
+                <NavDropdown.Item onClick={e => handleAnimationSpeed(e)}>Fast</NavDropdown.Item>
+                <NavDropdown.Item onClick={e => handleAnimationSpeed(e)}>Medium</NavDropdown.Item>
+                <NavDropdown.Item onClick={e => handleAnimationSpeed(e)}>Slow</NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

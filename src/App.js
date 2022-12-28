@@ -8,23 +8,33 @@ export const nodesContext = createContext()
 
 function App() {
   const CELL_DIMENSIONS = 25
-  const TOTAL_ROWS = Math.floor(window.innerHeight / CELL_DIMENSIONS) - 8
-  const TOTAL_COLS = Math.floor(window.innerWidth / CELL_DIMENSIONS) - 1
+  let TOTAL_ROWS = makeOdd(Math.floor(window.innerHeight / CELL_DIMENSIONS) - 8)
+  let TOTAL_COLS = makeOdd(Math.floor(window.innerWidth / CELL_DIMENSIONS) - 1)
 
-  // const TOTAL_ROWS = 4
-  // const TOTAL_COLS = 4
+  // let TOTAL_ROWS = makeOdd(6)
+  // let TOTAL_COLS = makeOdd(6)
 
-  const INITIAL_ROW = Math.floor(TOTAL_ROWS / 2)
-  const INITIAL_START_COL = Math.floor(TOTAL_COLS / 4)
-  const INITIAL_END_COL = TOTAL_COLS - INITIAL_START_COL
+  let INITIAL_ROW = makeEven(Math.floor(TOTAL_ROWS / 2))
+  const INITIAL_START_COL = makeEven(Math.floor(TOTAL_COLS / 4))
+  const INITIAL_END_COL = makeEven(TOTAL_COLS - INITIAL_START_COL)
 
   const [nodes, setNodes] = useState(initializeNodes())
   const [isAnimating, setIsAnimating] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
   const [chosenAlgorithm, setChosenAlgorithm] = useState("Dijkstra's Algorithm")
   const [selectedMaze, setSelectedMaze] = useState(null)
-
+  const [animationSpeed, setAnimationSpeed] = useState('Fast')
   const nodeRefs = useRef({})
+
+  function makeEven(num) {
+    if (num % 2 !== 0) num -= 1
+    return num
+  }
+
+  function makeOdd(num) {
+    if (num % 2 === 0) num -= 1
+    return num
+  }
 
   function createNode(row, col) {
     return {
@@ -70,8 +80,14 @@ function App() {
           chosenAlgorithm={chosenAlgorithm}
           setChosenAlgorithm={setChosenAlgorithm}
           setSelectedMaze={setSelectedMaze}
+          animationSpeed={animationSpeed}
+          setAnimationSpeed={setAnimationSpeed}
         />
-        <Information chosenAlgorithm={chosenAlgorithm} selectedMaze={selectedMaze} />
+        <Information
+          chosenAlgorithm={chosenAlgorithm}
+          selectedMaze={selectedMaze}
+          animationSpeed={animationSpeed}
+        />
         <Grid
           totalRows={TOTAL_ROWS}
           totalCols={TOTAL_COLS}
