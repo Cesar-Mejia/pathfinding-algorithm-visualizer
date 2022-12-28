@@ -1,6 +1,8 @@
 # Pathfinding Algorithm Visualizer
 
- This project allows you to visualize how different pathfinding algorithms work to find the shortest path between two points. The visualizer was built using React and Bootstrap.
+This project allows you to visualize how different pathfinding algorithms work to find the shortest path between two points. The visualizer was built using React and Bootstrap.
+
+The visualizer can be found at https://cesar-mejia.github.io/pathfinding-algorithm-visualizer/
 
 ## Algorithms
 
