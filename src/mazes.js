@@ -1,5 +1,6 @@
-// import { calculateAdjacentNodes } from './algorithms'
 import { startNode } from './algorithms'
+
+// maze helper function to calculate neighbors
 function calculateNeighboringNodes(node, nodes, totalRows, totalCols) {
   let currentNode = nodes[node]
   let adjacentNodes = []
@@ -23,6 +24,7 @@ function calculateNeighboringNodes(node, nodes, totalRows, totalCols) {
   return adjacentNodes
 }
 
+// maze helper function to get border nodes
 export function borderNodes(nodes, totalRows, totalCols) {
   let borderNodes = []
   for (let node in nodes) {
@@ -37,6 +39,7 @@ export function borderNodes(nodes, totalRows, totalCols) {
   return borderNodes
 }
 
+// implement binary tree maze algorithm
 export function binaryTree(nodes, totalRows, totalCols) {
   let border = borderNodes(nodes, totalRows, totalCols)
   let odd_cols = oddColumns(nodes, totalRows, totalCols)
@@ -48,7 +51,6 @@ export function binaryTree(nodes, totalRows, totalCols) {
   for (let node in nodes) {
     if (!totalWalls.includes(node)) emptyNodes.push(node)
   }
-  // let result = new Set(totalWalls)
 
   for (let node of emptyNodes) {
     let nodeRight = `r${nodes[node].row}c${nodes[node].col + 1}`
@@ -72,6 +74,7 @@ export function binaryTree(nodes, totalRows, totalCols) {
   return totalWalls.filter(wallNode => !path.includes(wallNode))
 }
 
+// recursive backtracking helper function to randomize array
 function shuffle(array) {
   let currentIndex = array.length,
     randomIndex
@@ -89,6 +92,7 @@ function shuffle(array) {
   return array
 }
 
+// implement recursive backtracking maze algorithm (wide)
 export function recursiveBackTracking(nodes, totalRows, totalCols) {
   let border = borderNodes(nodes, totalRows, totalCols)
   let start = startNode(nodes)
@@ -125,6 +129,7 @@ export function recursiveBackTracking(nodes, totalRows, totalCols) {
   return border.concat(wallNodes)
 }
 
+// implement recursive backtracking algorithm (narrow)
 export function recursiveBackTracking_narrow(nodes, totalRows, totalCols) {
   let border = borderNodes(nodes, totalRows, totalCols)
   let odd_cols = oddColumns(nodes, totalRows, totalCols)
@@ -140,11 +145,11 @@ export function recursiveBackTracking_narrow(nodes, totalRows, totalCols) {
   visited[current] = true
   stack.push(current)
 
-  // stack.length
   let count = 0
   while (stack.length) {
     count++
     current = stack.pop()
+
     // this function returns 2d array
     let currentNeighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
     let currentUnvisitedNeighbors = currentNeighbors.filter(neighbor => !visited[neighbor[0]])
@@ -237,6 +242,7 @@ export function aldousBroder(nodes, totalRows, totalCols) {
 
   while (Object.keys(unvisitedNodesObj).length) {
     count++
+
     // this function returns 2D array
     let neighbors = calculateNeighboringNodes(current, nodes, totalRows, totalCols)
     let randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)]

@@ -1,4 +1,12 @@
-import { Navbar, Container, Nav, NavDropdown, Button, Form } from 'react-bootstrap'
+import {
+  Navbar,
+  Container,
+  Nav,
+  NavDropdown,
+  Button,
+  Popover,
+  OverlayTrigger
+} from 'react-bootstrap'
 import { useState, useContext, useEffect } from 'react'
 import { nodesContext } from '../App'
 import { dijkstra, aStar, DFS_recursive, greedy_BFS } from '../algorithms'
@@ -22,7 +30,6 @@ function Header({
   setAnimationDone,
   chosenAlgorithm,
   setChosenAlgorithm,
-  selectedMaze,
   setSelectedMaze,
   animationSpeed,
   setAnimationSpeed
@@ -30,21 +37,25 @@ function Header({
   const [nodes, setNodes] = useContext(nodesContext)
   const [visitedNodes, setVisitedNodes] = useState([])
   const [shortestPath, setShortestPath] = useState([])
-
   const [visitedSpeed, setVisitedSpeed] = useState(10)
 
-  // const [mazeNodes, setMazeNodes] = useState(null)
-
+  // activates algorithm given change in nodes/chosen algorithms
   useEffect(() => {
-    activateAlgorithm()
+    if (animationDone) {
+      activateAlgorithm()
+    }
   }, [nodes, chosenAlgorithm])
 
+  // animates algorithms for initial activation and recomputation
   useEffect(() => {
     if (animationDone) {
       recomputeColors()
+    } else if (visitedNodes.length) {
+      animateAlgorithm()
     }
   }, [visitedNodes])
 
+  // sets animation speed
   useEffect(() => {
     switch (animationSpeed) {
       case 'Fast':
@@ -59,6 +70,7 @@ function Header({
     }
   }, [animationSpeed])
 
+  // initiates algorithm animations
   function animateAlgorithm() {
     setIsAnimating(true)
     clearAnimations()
@@ -78,6 +90,7 @@ function Header({
     }
   }
 
+  // helper function for animation of shortest path
   function animateShortestPath() {
     if (shortestPath.length === 0) {
       setIsAnimating(false)
@@ -97,10 +110,12 @@ function Header({
     }
   }
 
+  // resets chosen algorithm
   function chooseAlgorithm(e) {
     setChosenAlgorithm(e.target.innerHTML)
   }
 
+  // initites pathfinding algorithm given current chosen algorithm
   function activateAlgorithm() {
     switch (chosenAlgorithm) {
       case "Dijkstra's Algorithm":
@@ -131,6 +146,7 @@ function Header({
     }
   }
 
+  // clears animations - keeps walls
   function clearAnimations() {
     for (let node in nodeRefs.current) {
       const element = nodeRefs.current[node]
@@ -143,6 +159,7 @@ function Header({
     }
   }
 
+  // clears board of walls and animations
   function clearBoard() {
     setAnimationDone(false)
     setSelectedMaze(null)
@@ -156,6 +173,7 @@ function Header({
     setNodes(newNodes)
   }
 
+  // recomputes colors on algorithm recomputation
   function recomputeColors() {
     clearAnimations()
     for (let i = 0; i <= visitedNodes.length; i++) {
@@ -175,6 +193,7 @@ function Header({
     }
   }
 
+  // sets new maze on board
   function handleMazeSelection(e) {
     clearBoard()
     let result
@@ -206,9 +225,54 @@ function Header({
     setSelectedMaze(e.target.innerHTML)
   }
 
+  // changes animation speed
   function handleAnimationSpeed(e) {
     setAnimationSpeed(e.target.innerHTML)
   }
+
+  // activates algorithm when 'visualize' button clicked
+  function handleVisualizeButton() {
+    activateAlgorithm()
+    setAnimationDone(false)
+  }
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Header as="h1" align="center">
+        Instructions
+      </Popover.Header>
+      <Popover.Body>
+        <ul>
+          <li>
+            Click and drag to create <i>walls</i>
+          </li>
+          <li>
+            Move <i>start</i> and <i>end</i> nodes
+          </li>
+          <br></br>
+          <li>
+            Choose algorithm in <strong>Algorithms</strong> dropdown menu
+          </li>
+          <li>
+            Click <strong>Visualize</strong> to animate chosen algorithm
+          </li>
+          <li>
+            Choose maze in <strong>Add Maze</strong> dropdown menu
+          </li>
+          <li>
+            Click <strong>Animation Speed</strong> to adjust animation speed
+          </li>
+          <li>
+            <strong>Clear Board</strong> resets the board
+          </li>
+        </ul>
+        <p>
+          <strong>Tip</strong>: Move Start and End nodes after animation is complete to recompute
+          visited nodes and shortest path
+        </p>
+      </Popover.Body>
+    </Popover>
+  )
 
   return (
     <header>
@@ -242,7 +306,7 @@ function Header({
 
               <Button
                 variant="light"
-                onClick={animateAlgorithm}
+                onClick={handleVisualizeButton}
                 disabled={isAnimating}
               >{`Visualize!`}</Button>
               <NavDropdown
@@ -281,6 +345,11 @@ function Header({
                 <NavDropdown.Item onClick={e => handleAnimationSpeed(e)}>Slow</NavDropdown.Item>
               </NavDropdown>
             </Nav>
+            <OverlayTrigger trigger="click" placement="left" overlay={popover} rootClose={true}>
+              <Button id="help-button" className="btn" variant="dark">
+                ?
+              </Button>
+            </OverlayTrigger>
           </Navbar.Collapse>
         </Container>
       </Navbar>

@@ -29,8 +29,8 @@ export function endNode(nodes) {
   }
 }
 
+// reselt nodes to original state
 function resetNodes(prevNodes) {
-  // clearAnimations()
   let newNodes = { ...prevNodes }
   for (let node in newNodes) {
     newNodes[node].adjacentNodes = []
@@ -42,6 +42,7 @@ function resetNodes(prevNodes) {
   return newNodes
 }
 
+// helper function - returns adjacent nodes
 export function calculateAdjacentNodes(node, nodes, totalRows, totalCols) {
   let currentNode = nodes[node]
   let adjacentNodes = []
@@ -65,6 +66,7 @@ export function calculateAdjacentNodes(node, nodes, totalRows, totalCols) {
   return adjacentNodes
 }
 
+// implements dijkstra's algorithms
 export function dijkstra(prevNodes, totalRows, totalCols) {
   let nodes = resetNodes(prevNodes)
   let start = startNode(nodes)
@@ -113,6 +115,7 @@ export function dijkstra(prevNodes, totalRows, totalCols) {
   return { visitedNodes, shortestPath }
 }
 
+// heuristic helper function for A* and greed BFS algorithms
 function heuristic(nodes, node1, node2) {
   // calculates the manhattan distance between nodes
   const rowDifference = Math.abs(nodes[node1].row - nodes[node2].row)
@@ -120,6 +123,7 @@ function heuristic(nodes, node1, node2) {
   return rowDifference + colDifference
 }
 
+// implements A* search algorithm
 export function aStar(prevNodes, totalRows, totalCols) {
   let nodes = resetNodes(prevNodes)
   let start = startNode(nodes)
@@ -164,6 +168,7 @@ export function aStar(prevNodes, totalRows, totalCols) {
   return { visitedNodes, shortestPath }
 }
 
+// implements depth-first search algorithm
 export function DFS_recursive(prevNodes, totalRows, totalCols) {
   let nodes = resetNodes(prevNodes)
   let start = startNode(nodes)
@@ -203,6 +208,7 @@ export function DFS_recursive(prevNodes, totalRows, totalCols) {
   return { visitedNodes, shortestPath }
 }
 
+// implements greedy best-first search algorithm
 export function greedy_BFS(prevNodes, totalRows, totalCols) {
   let nodes = resetNodes(prevNodes)
   let start = startNode(nodes)

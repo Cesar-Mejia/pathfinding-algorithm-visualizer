@@ -10,6 +10,7 @@ function Node({
   mouseIsPressed,
   nodeRefs
 }) {
+  // set conditional class given end/start/wall node
   const conditionalClass = isEndNode
     ? 'node-end'
     : isStartNode
@@ -18,6 +19,7 @@ function Node({
     ? 'node-wall'
     : ''
 
+  // handles mouse enter in node
   function handleMouseEnter(e) {
     if (mouseIsPressed) onMouseEnter(e)
   }

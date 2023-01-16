@@ -4,19 +4,21 @@ import { startNode, endNode } from '../algorithms'
 import Node from './Node'
 import './Grid.css'
 
-function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setAnimationDone }) {
+function Grid({ totalRows, totalCols, nodeRefs, isAnimating }) {
   const [nodes, setNodes] = useContext(nodesContext)
 
   const [startNodePressed, setStartNodePressed] = useState(false)
   const [endNodePressed, setEndNodePressed] = useState(false)
   const [mouseIsPressed, setMouseIsPressed] = useState(false)
 
+  // function to toggle wall node
   function toggleWallNode(node) {
     let newNodes = { ...nodes }
     newNodes[node].isWallNode = !newNodes[node].isWallNode
     setNodes(newNodes)
   }
 
+  // resets the start node location
   function resetStartNode(newStartNode) {
     let newNodes = { ...nodes }
     let prevStartNode = startNode(nodes)
@@ -27,6 +29,7 @@ function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setAnimationDone })
     setNodes(newNodes)
   }
 
+  // resets end node location
   function resetEndNode(newEndNode) {
     let newNodes = { ...nodes }
     let prevEndNode = endNode(nodes)
@@ -37,6 +40,7 @@ function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setAnimationDone })
     setNodes(newNodes)
   }
 
+  // handles mouse down - resets start/end node
   function onMouseDown(e) {
     setMouseIsPressed(true)
     const pressedNode = e.target.id
@@ -48,6 +52,7 @@ function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setAnimationDone })
     }
   }
 
+  // resets start/end nodes on mouse enter on node
   function onMouseEnter(e) {
     const enteredNode = e.target.id
 
@@ -69,12 +74,14 @@ function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setAnimationDone })
     }
   }
 
+  // resets state on mouse up
   function onMouseUp() {
     setMouseIsPressed(false)
     setStartNodePressed(false)
     setEndNodePressed(false)
   }
 
+  // builds grid given totalRows, totalCols
   function buildGrid() {
     const rows = []
     for (let i = 1; i <= totalRows; i++) {
@@ -105,17 +112,8 @@ function Grid({ totalRows, totalCols, nodeRefs, isAnimating, setAnimationDone })
     return rows
   }
 
-  // function handleAnimationEnd(e) {
-  //   if (e.target.id !== endNode(nodes)) return
-  //   setAnimationDone(true)
-  // }
-
   return (
-    <table
-      className="grid"
-      // onAnimationEnd={isAnimating ? e => handleAnimationEnd(e) : null}
-      style={isAnimating ? { pointerEvents: 'none' } : {}}
-    >
+    <table className="grid" style={isAnimating ? { pointerEvents: 'none' } : {}}>
       {<tbody>{buildGrid()}</tbody>}
     </table>
   )

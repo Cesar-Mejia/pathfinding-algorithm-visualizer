@@ -5,64 +5,19 @@
   font-size: 8px;
 }
 
-
-
 .node-start {
-  /* background-color: darkolivegreen; */
   background-image: url("../img/start-node.svg");
 }
 
 .node-end {
-  /* background-color: darkred; */
   background-image: url("../img/end-node.svg");
 }
 
-/* .node-wall {
-  /* background-image: url("../img/brick.svg");
-  background-size: 190%; */
-  /* background-color: darkgray; */
-
-/* } */ 
 
 .node-wall{
   background-color: rgb(12, 53, 71);
  
 }
-
-
-/* .node-wall {
-  animation-name: wallAnimation;
-  animation-duration: 0.4s;
-  animation-timing-function: ease-out;
-  animation-delay: 0;
-  animation-direction: alternate;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-  animation-play-state: running;
-}
-
- @keyframes wallAnimation {
-  30% {
-    transform: scale(.3);
-    background-color: rgb(12, 53, 71);
-  } 
-
-   50% {
-    transform: scale(1.2);
-    background-color: rgb(12, 53, 71);
-  }
-
-  100% {
-    transform: scale(1.0);
-    background-color: rgb(12, 53, 71);
-  }
-}  */
-
-/* .node-ispath {
-  background-color: yellow;
-} */
-
-
 
 .node-visited {
   animation-name: visitedAnimation;

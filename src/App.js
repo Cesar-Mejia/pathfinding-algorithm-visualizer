@@ -11,9 +11,6 @@ function App() {
   let TOTAL_ROWS = makeOdd(Math.floor(window.innerHeight / CELL_DIMENSIONS) - 8)
   let TOTAL_COLS = makeOdd(Math.floor(window.innerWidth / CELL_DIMENSIONS) - 1)
 
-  // let TOTAL_ROWS = makeOdd(6)
-  // let TOTAL_COLS = makeOdd(6)
-
   let INITIAL_ROW = makeEven(Math.floor(TOTAL_ROWS / 2))
   const INITIAL_START_COL = makeEven(Math.floor(TOTAL_COLS / 4))
   const INITIAL_END_COL = makeEven(TOTAL_COLS - INITIAL_START_COL)
@@ -26,16 +23,19 @@ function App() {
   const [animationSpeed, setAnimationSpeed] = useState('Fast')
   const nodeRefs = useRef({})
 
+  // helper function to make a given number odd - for setting rows/cols
   function makeEven(num) {
     if (num % 2 !== 0) num -= 1
     return num
   }
 
+  // helper function to make a given number even - for setting rows/cols
   function makeOdd(num) {
     if (num % 2 === 0) num -= 1
     return num
   }
 
+  // helper function to create a node - returns an object
   function createNode(row, col) {
     return {
       row,
@@ -53,6 +53,7 @@ function App() {
     }
   }
 
+  // initialize nodes object
   function initializeNodes() {
     let nodes = {}
     for (let row = 1; row <= TOTAL_ROWS; row++) {
@@ -103,6 +104,3 @@ function App() {
 }
 
 export default App
-
-// Change the computation of the algorithm to button press
-// Add compare functionality

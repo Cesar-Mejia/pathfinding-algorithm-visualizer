@@ -1,7 +1,7 @@
 import Figure from 'react-bootstrap/Figure'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Information.css'
+
 function Information({ chosenAlgorithm, selectedMaze, animationSpeed }) {
   return (
     <div className="info-container">

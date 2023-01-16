@@ -1,5 +1,4 @@
 .info {
-  /* background-color: lightblue; */
   height: 90px;
   padding-top: 20px;
 }
@@ -34,12 +33,8 @@
 .info-current-algorithm {
   margin-top: 12px;
   margin-bottom: 6px;
-  /* font-weight: bold; */
 }
-/* .info-unvisited-node {
-  border-width: 4px;
-  border-color: black;
-} */
+
 
 .caption {
   color: black;
@@ -47,7 +42,6 @@
 
 .current-selections {
   display: flex;
-   /* flex-direction: row; */
   justify-content: space-evenly; 
   margin-bottom: 7px;
 }
